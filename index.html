@@ -4,7 +4,7 @@
 <meta name="x-ogp-key" content="d3623dc6-3cfc-49fa-b771-3bbb8d52e4a1" id="ogp-key-meta" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Capybara Simulator</title>
+    <title>Capy Cafe Truck Rally</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
@@ -23,6 +23,192 @@
         #loading .bar { width: 200px; height: 6px; background: #0a1a0a; border-radius: 3px; overflow: hidden; }
         #loading .fill { height: 100%; background: #6abf69; width: 0%; transition: width 0.3s; }
         #loading .sub { font-size: 12px; margin-top: 10px; opacity: 0.6; }
+
+        #main-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 70;
+            display: none;
+            pointer-events: none;
+            font-family: 'Quicksand', sans-serif;
+            color: #fff7dc;
+        }
+        #main-menu.visible { display: block; }
+        .menu-title {
+            position: absolute;
+            top: clamp(18px, 4vh, 42px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(980px, 96vw);
+            text-align: center;
+            font-size: clamp(32px, 5.1vw, 64px);
+            line-height: 0.92;
+            font-weight: 800;
+            letter-spacing: 0;
+            color: #fff2b8;
+            text-shadow:
+                0 3px 0 #7d2b10,
+                0 10px 30px rgba(120, 22, 0, 0.55),
+                0 0 34px rgba(255, 166, 54, 0.38);
+            pointer-events: none;
+        }
+        .menu-shell {
+            position: absolute;
+            left: clamp(22px, 6vw, 88px);
+            top: 50%;
+            transform: translateY(-44%);
+            width: min(360px, 38vw);
+            pointer-events: all;
+        }
+        .menu-logo {
+            width: min(220px, 28vw);
+            aspect-ratio: 1;
+            object-fit: contain;
+            display: block;
+            margin: 0 0 10px;
+            filter: drop-shadow(0 12px 24px rgba(0,0,0,0.42));
+        }
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: min(280px, 100%);
+        }
+        .menu-btn {
+            appearance: none;
+            border: 2px solid rgba(255, 237, 169, 0.82);
+            border-radius: 8px;
+            min-height: 58px;
+            padding: 0 22px;
+            cursor: pointer;
+            color: #351507;
+            background: linear-gradient(180deg, #ffe77a 0%, #ff9d2e 54%, #dc5415 100%);
+            box-shadow:
+                0 8px 0 #7c2c0e,
+                0 16px 28px rgba(0,0,0,0.32),
+                inset 0 1px 0 rgba(255,255,255,0.52);
+            font: 800 22px/1 'Quicksand', sans-serif;
+            letter-spacing: 0;
+            text-align: left;
+            transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+        }
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            filter: saturate(1.08) brightness(1.03);
+            box-shadow:
+                0 10px 0 #7c2c0e,
+                0 20px 34px rgba(0,0,0,0.36),
+                inset 0 1px 0 rgba(255,255,255,0.58);
+        }
+        .menu-btn:active {
+            transform: translateY(5px);
+            box-shadow:
+                0 3px 0 #7c2c0e,
+                0 8px 18px rgba(0,0,0,0.32),
+                inset 0 1px 0 rgba(255,255,255,0.45);
+        }
+        .settings-panel {
+            width: min(280px, 100%);
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 8px;
+            background: rgba(50, 23, 10, 0.74);
+            border: 1px solid rgba(255, 226, 139, 0.3);
+            box-shadow: 0 16px 34px rgba(0,0,0,0.28);
+            backdrop-filter: blur(14px);
+            display: none;
+            color: #fff1c9;
+        }
+        .settings-panel.visible { display: block; }
+        .settings-row {
+            width: 100%;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: 700 15px/1 'Quicksand', sans-serif;
+            cursor: pointer;
+            padding: 0;
+        }
+        .settings-row + .settings-row {
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+        .settings-toggle {
+            width: 42px;
+            height: 24px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.26);
+            position: relative;
+            flex: 0 0 auto;
+        }
+        .settings-toggle::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff2b8;
+            transition: transform 0.18s ease;
+        }
+        .settings-row.active .settings-toggle {
+            background: linear-gradient(135deg, #ffbe42, #e95a1a);
+        }
+        .settings-row.active .settings-toggle::after { transform: translateX(18px); }
+        .exit-note {
+            width: min(280px, 100%);
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.38);
+            color: rgba(255,247,220,0.88);
+            font-size: 13px;
+            font-weight: 700;
+            display: none;
+        }
+        .exit-note.visible { display: block; }
+
+        @media (max-width: 760px) {
+            .menu-title {
+                top: calc(16px + env(safe-area-inset-top, 0px));
+                font-size: clamp(32px, 12vw, 50px);
+            }
+            .menu-shell {
+                left: 18px;
+                right: 18px;
+                bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+                top: auto;
+                width: auto;
+                transform: none;
+            }
+            .menu-logo {
+                width: 116px;
+                margin-bottom: 8px;
+            }
+            .menu-buttons {
+                width: min(260px, 72vw);
+                gap: 9px;
+            }
+            .menu-btn {
+                min-height: 48px;
+                font-size: 18px;
+                padding: 0 18px;
+                box-shadow:
+                    0 6px 0 #7c2c0e,
+                    0 12px 24px rgba(0,0,0,0.3),
+                    inset 0 1px 0 rgba(255,255,255,0.52);
+            }
+            .settings-panel,
+            .exit-note {
+                width: min(260px, 72vw);
+            }
+        }
 
         #hud {
             position: fixed; top: 60px; left: 0; right: 0;
@@ -1652,6 +1838,28 @@
     </script>
 </head>
 <body>
+    <div id="main-menu">
+        <h1 class="menu-title">Capy Cafe Truck Rally</h1>
+        <div class="menu-shell">
+            <img class="menu-logo" src="assets/capy-fire-logo.png" alt="Capy Cafe Truck Rally logo">
+            <div class="menu-buttons">
+                <button class="menu-btn" id="menu-play">Play</button>
+                <button class="menu-btn" id="menu-settings">Settings</button>
+                <button class="menu-btn" id="menu-exit">Exit</button>
+            </div>
+            <div class="settings-panel" id="settings-panel">
+                <button class="settings-row active" id="setting-music">
+                    <span>Music</span>
+                    <span class="settings-toggle" aria-hidden="true"></span>
+                </button>
+                <button class="settings-row" id="setting-rain">
+                    <span>Rain FX</span>
+                    <span class="settings-toggle" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="exit-note" id="exit-note">Exit is controlled by the browser tab.</div>
+        </div>
+    </div>
     <div id="hud" style="display:none;">
         <div id="points"><span id="score">0</span> vibes</div>
         <div id="music-controls">
@@ -1823,7 +2031,7 @@
         <button id="fetch-close">✕ Close</button>
     </div>
     <div id="loading">
-        <div class="title">Capybara Simulator</div>
+        <div class="title">Capy Cafe Truck Rally</div>
         <div class="bar"><div class="fill" id="loadBar"></div></div>
         <div class="sub" id="loadText">loading...</div>
     </div>
@@ -9571,10 +9779,10 @@
                 this.orbitHeight = 1.3; // low angle like reference
                 this.orbitSpeed = 0.08; // slow, cinematic
                 this.orbitAngle = 0;
-                this.orbitTarget = new THREE.Vector3(0, 0.5, 0); // capybara center
+                this.orbitTarget = new THREE.Vector3(2.1, 0.8, 0.05); // home-screen capybara center
 
                 // 3/4 view from her right, slightly above
-                this.camera.position.set(3.5, 1.8, 4);
+                this.camera.position.set(5.6, 2.25, 5.2);
                 this.camera.lookAt(this.orbitTarget);
 
                 this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -9668,6 +9876,13 @@
 
                 // Free roam mode
                 this._freeRoamGame = null;
+
+                // Home menu scene state
+                this._mainMenuActive = true;
+                this._musicEnabled = true;
+                this._rainEnabled = false;
+                this._homeBike = null;
+                this._homeBikePos = new THREE.Vector3(2.1, 0, 0.1);
 
                 this.setupLighting();
                 this.loadModels().then(() => this.buildScene());
@@ -9920,6 +10135,155 @@
                 return 3.0;
             }
 
+            _makeBeamBetween(a, b, radius, material) {
+                const mid = new THREE.Vector3().addVectors(a, b).multiplyScalar(0.5);
+                const dir = new THREE.Vector3().subVectors(b, a);
+                const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, dir.length(), 12), material);
+                mesh.position.copy(mid);
+                mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                return mesh;
+            }
+
+            _createHomeHouse() {
+                const house = new THREE.Group();
+                house.position.set(this._homeBikePos.x, 0, this._homeBikePos.z);
+
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x8b5a2b, roughness: 0.72 });
+                const wallMat = new THREE.MeshStandardMaterial({ color: 0xffd58a, roughness: 0.82 });
+                const trimMat = new THREE.MeshStandardMaterial({ color: 0x6d3418, roughness: 0.75 });
+                const roofMat = new THREE.MeshStandardMaterial({ color: 0xb7431d, roughness: 0.68 });
+                const glowMat = new THREE.MeshBasicMaterial({ color: 0xffc95a, transparent: true, opacity: 0.68 });
+
+                const floor = new THREE.Mesh(new THREE.BoxGeometry(5.9, 0.14, 4.6), floorMat);
+                floor.position.set(0, 0.01, -0.35);
+                floor.receiveShadow = true;
+                house.add(floor);
+
+                const rug = new THREE.Mesh(new THREE.BoxGeometry(3.25, 0.035, 1.65), new THREE.MeshStandardMaterial({ color: 0xf06a2a, roughness: 0.65 }));
+                rug.position.set(0.15, 0.105, 0.2);
+                rug.receiveShadow = true;
+                house.add(rug);
+
+                const backWall = new THREE.Mesh(new THREE.BoxGeometry(5.9, 3.25, 0.18), wallMat);
+                backWall.position.set(0, 1.67, -2.55);
+                backWall.castShadow = true;
+                backWall.receiveShadow = true;
+                house.add(backWall);
+
+                const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.18, 3.05, 4.4), wallMat);
+                leftWall.position.set(-2.95, 1.55, -0.35);
+                leftWall.castShadow = true;
+                leftWall.receiveShadow = true;
+                house.add(leftWall);
+
+                const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.18, 3.05, 4.4), wallMat);
+                rightWall.position.set(2.95, 1.55, -0.35);
+                rightWall.castShadow = true;
+                rightWall.receiveShadow = true;
+                house.add(rightWall);
+
+                const roofLeft = new THREE.Mesh(new THREE.BoxGeometry(3.35, 0.24, 4.9), roofMat);
+                roofLeft.position.set(-1.45, 3.25, -0.35);
+                roofLeft.rotation.z = -0.43;
+                roofLeft.castShadow = true;
+                house.add(roofLeft);
+
+                const roofRight = roofLeft.clone();
+                roofRight.position.x = 1.45;
+                roofRight.rotation.z = 0.43;
+                house.add(roofRight);
+
+                const ridge = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.24, 4.95), trimMat);
+                ridge.position.set(0, 3.9, -0.35);
+                ridge.castShadow = true;
+                house.add(ridge);
+
+                const windowFrame = new THREE.Mesh(new THREE.BoxGeometry(1.18, 0.88, 0.06), trimMat);
+                windowFrame.position.set(-1.55, 1.96, -2.44);
+                house.add(windowFrame);
+                const windowGlow = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.62, 0.07), glowMat);
+                windowGlow.position.set(-1.55, 1.96, -2.39);
+                house.add(windowGlow);
+
+                const counter = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.72, 0.42), new THREE.MeshStandardMaterial({ color: 0x7b4223, roughness: 0.7 }));
+                counter.position.set(1.35, 0.48, -2.18);
+                counter.castShadow = true;
+                counter.receiveShadow = true;
+                house.add(counter);
+
+                const lamp = new THREE.PointLight(0xffb25a, 1.2, 5.5);
+                lamp.position.set(0.6, 2.65, -1.35);
+                house.add(lamp);
+
+                this.scene.add(house);
+                this._homeHouse = house;
+            }
+
+            _createHomeBike() {
+                const bike = new THREE.Group();
+                bike.position.copy(this._homeBikePos);
+
+                const tireMat = new THREE.MeshStandardMaterial({ color: 0x191614, roughness: 0.55, metalness: 0.05 });
+                const rimMat = new THREE.MeshStandardMaterial({ color: 0xf15a24, roughness: 0.32, metalness: 0.35 });
+                const frameMat = new THREE.MeshStandardMaterial({ color: 0xff7a1f, roughness: 0.42, metalness: 0.18 });
+                const metalMat = new THREE.MeshStandardMaterial({ color: 0x2f2926, roughness: 0.38, metalness: 0.5 });
+
+                const wheelGeo = new THREE.TorusGeometry(0.43, 0.085, 12, 32);
+                const rimGeo = new THREE.TorusGeometry(0.28, 0.025, 8, 24);
+                const wheelPositions = [new THREE.Vector3(-0.78, 0.45, 0), new THREE.Vector3(0.78, 0.45, 0)];
+                for (const pos of wheelPositions) {
+                    const tire = new THREE.Mesh(wheelGeo, tireMat);
+                    tire.position.copy(pos);
+                    tire.rotation.y = Math.PI / 2;
+                    tire.castShadow = true;
+                    tire.receiveShadow = true;
+                    bike.add(tire);
+
+                    const rim = new THREE.Mesh(rimGeo, rimMat);
+                    rim.position.copy(pos);
+                    rim.rotation.y = Math.PI / 2;
+                    rim.castShadow = true;
+                    bike.add(rim);
+
+                    for (let i = 0; i < 6; i++) {
+                        const angle = i / 6 * Math.PI * 2;
+                        const end = new THREE.Vector3(pos.x, pos.y + Math.sin(angle) * 0.27, Math.cos(angle) * 0.27);
+                        bike.add(this._makeBeamBetween(pos, end, 0.01, metalMat));
+                    }
+                }
+
+                const crank = new THREE.Vector3(0, 0.62, 0);
+                const seat = new THREE.Vector3(-0.22, 1.1, 0);
+                const handle = new THREE.Vector3(0.9, 1.15, 0);
+                const rearHub = wheelPositions[0];
+                const frontHub = wheelPositions[1];
+                [
+                    [rearHub, crank], [crank, frontHub], [rearHub, seat],
+                    [seat, handle], [crank, seat], [frontHub, handle],
+                ].forEach(([a, b]) => bike.add(this._makeBeamBetween(a, b, 0.035, frameMat)));
+
+                const saddle = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.12, 0.34), metalMat);
+                saddle.position.copy(seat).add(new THREE.Vector3(0, 0.08, 0));
+                saddle.castShadow = true;
+                bike.add(saddle);
+
+                const handlebar = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.82), metalMat);
+                handlebar.position.copy(handle).add(new THREE.Vector3(0.05, 0.04, 0));
+                handlebar.castShadow = true;
+                bike.add(handlebar);
+
+                const numberPlate = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.32, 0.04), new THREE.MeshStandardMaterial({ color: 0xffd84a, roughness: 0.45 }));
+                numberPlate.position.set(0.84, 0.88, 0.34);
+                numberPlate.rotation.y = -0.22;
+                numberPlate.castShadow = true;
+                bike.add(numberPlate);
+
+                this.scene.add(bike);
+                this._homeBike = bike;
+            }
+
             buildScene() {
                 // === TERRAIN ===
                 const groundGeo = new THREE.PlaneGeometry(140, 120, 50, 40);
@@ -10010,6 +10374,9 @@
                 // Water
                 water.position.set(0, 0.01, -13);
                 this.scene.add(water);
+
+                this._createHomeHouse();
+                this._createHomeBike();
 
                 // === FLOWERS (flower.glb, instanced lavender, GPU wind) ===
                 if (this.models['flower']) {
@@ -10169,11 +10536,11 @@
                     console.log('Capybara bbox min:', box2.min.x.toFixed(2), box2.min.y.toFixed(2), box2.min.z.toFixed(2),
                                 'max:', box2.max.x.toFixed(2), box2.max.y.toFixed(2), box2.max.z.toFixed(2));
                     
-                    capyGroup.position.y = -0.05;
+                    capyGroup.position.set(this._homeBikePos.x - 0.04, 0.72, this._homeBikePos.z - 0.02);
                     // Face toward camera (camera is at +z)
                     // The model faces +z in its local space after armature rotation
                     // so rotate 180 to face -z... test different values
-                    capyGroup.rotation.y = 0;
+                    capyGroup.rotation.y = -0.18;
                     
                     capy.traverse(c => {
                         if (c.isMesh) {
@@ -10228,6 +10595,7 @@
                 this.setupWeather();
                 this.setupActionButtons();
                 this.setupMarketCap();
+                this.setupMainMenu();
                 console.log('Scene built!');
             }
 
@@ -10683,6 +11051,70 @@
             }
 
             /* ── SFX System (cozy procedural sounds via Web Audio) ── */
+            setupMainMenu() {
+                const menu = document.getElementById('main-menu');
+                const playBtn = document.getElementById('menu-play');
+                const settingsBtn = document.getElementById('menu-settings');
+                const exitBtn = document.getElementById('menu-exit');
+                const settingsPanel = document.getElementById('settings-panel');
+                const musicSetting = document.getElementById('setting-music');
+                const rainSetting = document.getElementById('setting-rain');
+                const exitNote = document.getElementById('exit-note');
+
+                const syncSettings = () => {
+                    musicSetting.classList.toggle('active', !this._muted);
+                    rainSetting.classList.toggle('active', this._weatherTarget === 1);
+                };
+
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._playSfxClick();
+                    this._mainMenuActive = false;
+                    menu.classList.remove('visible');
+                    settingsPanel.classList.remove('visible');
+                    exitNote.classList.remove('visible');
+                    if (this._mcapBubble) this._mcapBubble.visible = true;
+                    document.getElementById('hud').style.display = 'flex';
+                    document.getElementById('action-buttons').style.display = 'flex';
+                    document.getElementById('freemode-bar').style.display = 'block';
+                });
+
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._playSfxMenuOpen();
+                    settingsPanel.classList.toggle('visible');
+                    exitNote.classList.remove('visible');
+                    syncSettings();
+                });
+
+                musicSetting.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('btn-mute').click();
+                    syncSettings();
+                });
+
+                rainSetting.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('btn-rain').click();
+                    syncSettings();
+                });
+
+                exitBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._playSfxClick();
+                    exitNote.classList.add('visible');
+                    settingsPanel.classList.remove('visible');
+                    window.close();
+                });
+
+                document.getElementById('hud').style.display = 'none';
+                document.getElementById('action-buttons').style.display = 'none';
+                document.getElementById('freemode-bar').style.display = 'none';
+                if (this._mcapBubble) this._mcapBubble.visible = false;
+                syncSettings();
+                menu.classList.add('visible');
+            }
+
             _ensureSFX() {
                 if (this._sfxCtx) return;
                 this._sfxCtx = new (window.AudioContext || window.webkitAudioContext)();

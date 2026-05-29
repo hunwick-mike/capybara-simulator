@@ -10,5 +10,6 @@ screenshot.js
 .DS_Store
 models/*.zip
 *.png
+!assets/*.png
 !Icons/**/*.png
 !Icons/*.png
